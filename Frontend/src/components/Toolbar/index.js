@@ -1,4 +1,6 @@
 import styles from './index.module.css';
+import { socket } from '@/socket';
+
 import { COLORS, MENU_ITEMS } from '../constant.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeBrushSize,changeColor } from '@/slice/toolboxSlice';
@@ -11,11 +13,14 @@ const Toolbox = () =>{
     const showBrushOption = activeMenuItem ===MENU_ITEMS.ERASER || MENU_ITEMS.PENCIL ;
     const updateBrushSize = (e) =>{
             dispatch(changeBrushSize({item:activeMenuItem,size: e.target.value}))
+            socket.emit('changeConfig', {color,size:e.target.value})
     }
 
     const updateColor = (newcolor)=>{
             dispatch(changeColor ({item:activeMenuItem,color: newcolor}))
+            socket.emit('changeConfig', {color:newcolor,size})
     }
+    
     return (
         <div className={styles.toolboxContainer}>
             {showstrokeOption && <div className={styles.toolItem}>

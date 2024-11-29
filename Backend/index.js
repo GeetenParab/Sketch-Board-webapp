@@ -10,10 +10,20 @@ app.use(cors({origin:"http://localhost:3000"}));
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+
+  socket.on('beginPath',(args)=>{
+    socket.broadcast.emit('beginPath',args);
+  });
+
+  socket.on('drawLine',(args)=>{
+    socket.broadcast.emit('drawLine',args);
+  })
+
+  socket.on('changeConfig',(args)=>{
+    socket.broadcast.emit('changeConfig',args);
+  })
 });
-app.get('/',(req,res)=>{
-    res.send({msg:"hello"})
-})
+
 
 httpServer.listen(5000, () => {
   console.log('server running at http://localhost:5000');
